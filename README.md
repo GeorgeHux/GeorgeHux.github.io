@@ -1,3 +1,3 @@
-This is my personal website: https://georgehux.github.io/
+This is my personal website: https://georgehux.github.io
 
-Style referenced from [http://hexianghu.com/](https://leoyuan.site).
+Style referenced from https://leoyuan.site.
