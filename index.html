@@ -746,11 +746,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </p>
 
         <div class="image-gallery">
-          <img class="intro-img frame" src="./images/self-portrait/lol2.jpg" alt="Image 1">
-          <img class="intro-img frame" src="./images/self-portrait/graduation ceremony.jpg" alt="Image 2">
-          <img class="intro-img frame" src="./images/self-portrait/dafx oral.jpg" alt="Image 3">
-          <img class="intro-img frame" src="./images/self-portrait/formal.jpg" alt="Image 4">
-          <img class="intro-img frame" src="./images/self-portrait/Eusipco.jpg" alt="Image 5">
+          <img class="intro-img frame gallery-item" src="./images/self-portrait/lol2.jpg" alt="Image 1">
+          <img class="intro-img frame gallery-item" src="./images/self-portrait/graduation ceremony.jpg" alt="Image 2">
+          <img class="intro-img frame gallery-item" src="./images/self-portrait/dafx oral.jpg" alt="Image 3">
+          <img class="intro-img frame gallery-item" src="./images/self-portrait/formal.jpg" alt="Image 4">
+          <img class="intro-img frame gallery-item" src="./images/self-portrait/Eusipco.jpg" alt="Image 5">
+          <img class="intro-img frame gallery-item" src="./images/self-portrait/designeng_group.jpg" alt="Image 6">
+          <img class="intro-img frame gallery-item" src="./images/self-portrait/lab_group.jpg" alt="Image 7">
         </div>
 
       </div>
@@ -765,19 +767,81 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   justify-content: center;
   gap: 15px;
   margin-top: 20px;
+  overflow: hidden; /* Prevent scrollbar from appearing */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.image-gallery img {
-  width: 22%; /* Roughly 4 images in a row with gaps */
+/* Ensure containers with image-gallery don't show scrollbar */
+.pub .image-gallery {
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.image-gallery img.gallery-item {
+  height: auto;
+  max-width: calc(100% - 15px); /* Account for gap to prevent overflow */
+  max-height: 300px; 
+  width: auto;  
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
   transition: transform 0.3s ease;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(30px) scale(0.9);
+  box-sizing: border-box; /* Ensure padding and border don't cause overflow */
 }
 
-.image-gallery img:hover {
-  transform: scale(1.05);
+.image-gallery img.gallery-item.animated {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.image-gallery img.gallery-item:hover {
+  transform: translateY(0) scale(1.05);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  
+  // Use Intersection Observer API to detect when images enter viewport
+  const observerOptions = {
+    root: null, // Use viewport as root
+    rootMargin: '50px', // Start loading 50px before entering viewport
+    threshold: 0.1 // Trigger when 10% of image is visible
+  };
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        // Add delay to make images appear sequentially
+        setTimeout(() => {
+          entry.target.classList.add('animated');
+        }, index * 100); // Delay each image by 100ms
+        observer.unobserve(entry.target); // Stop observing after animation is triggered
+      }
+    });
+  }, observerOptions);
+
+  // Start observing all images
+  galleryItems.forEach(item => {
+    observer.observe(item);
+  });
+});
+</script>
 
 
 
