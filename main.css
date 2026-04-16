@@ -761,9 +761,11 @@ pre>code {
 .circle-img {
     margin: 0px auto;
     width: 168px;
+    height: 168px;
     border-width: 4px;
     border-style: solid;
-    border-radius: 50%
+    border-radius: 22px;
+    object-fit: cover
 }
 
 .square-img {
@@ -788,9 +790,11 @@ pre>code {
 .circle-img-light {
     margin: 0px auto;
     width: 168px;
+    height: 168px;
     border-width: 3px;
     border-style: solid;
-    border-radius: 50%
+    border-radius: 22px;
+    object-fit: cover
 }
 
 #my-name {
@@ -1615,13 +1619,71 @@ div.paginate-container li:nth-last-child(2) a:after {
 .pub-left>.intro-img {
     width: 280px;
     border-style: solid;
-    border-color: #9b3022
+    border-color: #9b3022;
+    border-radius: 10px
 }
 
 .pub-right {
     float: right;
     width: -webkit-calc(60% - (30px / 2));
-    width: calc(60% - (30px / 2))
+    width: calc(60% - (30px / 2));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "title title"
+        "desc desc"
+        "authors publish"
+        "tags publish";
+    column-gap: 12px;
+    row-gap: 2px;
+    align-items: start;
+}
+
+.pub-right>.title {
+    grid-area: title;
+}
+
+.pub-right>.desc {
+    grid-area: desc;
+}
+
+.pub-right>.authors {
+    grid-area: authors;
+    min-width: 0;
+}
+
+.pub-right>.publish {
+    grid-area: publish;
+    float: none;
+    justify-self: end;
+    text-align: right;
+    white-space: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.pub-right>.tags {
+    grid-area: tags;
+}
+
+@media screen and (max-width: 600px) {
+    .pub-right {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "title"
+            "desc"
+            "authors"
+            "publish"
+            "tags";
+    }
+
+    .pub-right>.publish {
+        justify-self: start;
+        text-align: left;
+        align-items: flex-start;
+    }
 }
 
 @media screen and (max-width: 800px) {
@@ -1649,9 +1711,11 @@ div.paginate-container li:nth-last-child(2) a:after {
     font-weight: 600
 }
 
-.pub-right>.authors>.author {
+.pub-right .authors .author {
     color: #0077B5;
-    font-weight: 400
+    font-weight: 400;
+    display: inline-block;
+    white-space: nowrap
 }
 
 .pub-right>.tags>.tag {
@@ -1660,36 +1724,37 @@ div.paginate-container li:nth-last-child(2) a:after {
     font-size: 14px
 }
 
+
 .pub-right>.desc>p {
     margin: auto
 }
 
 .pub-right>.publish {
-    float: right
+    float: none
 }
 
 .pub-right>.publish>.publisher {
     color: #002336;
-    font-size: 16px
+    font-size: 16px;
+    display: block
 }
 
 .pub-right>.publish>.status {
     color: #9b3022;
     font-weight: 800;
-    font-size: 16px
+    font-size: 16px;
+    display: block
 }
 
-@media screen and (max-width: 600px) {
-    .pub-right>.publish>.status {
-        display: none
-    }
-}
+
 
 .pub-right>.publish>.place {
     color: #0077B5;
     font-weight: 500;
-    font-size: 16px
+    font-size: 16px;
+    display: block
 }
+
 
 @media screen and (max-width: 600px) {
     .pub-right>.publish>.place {
