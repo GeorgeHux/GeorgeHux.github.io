@@ -1593,6 +1593,12 @@ div.paginate-container li:nth-last-child(2) a:after {
     font-family: 'Roboto', sans-serif, Helvetica
 }
 
+.pub-direction {
+    font-weight: 700;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
 .pub-list {
     overflow: auto
 }
