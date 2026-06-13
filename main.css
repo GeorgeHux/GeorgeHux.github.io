@@ -1626,7 +1626,10 @@ div.paginate-container li:nth-last-child(2) a:after {
     width: 280px;
     border-style: solid;
     border-color: #9b3022;
-    border-radius: 10px
+    border-radius: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
 }
 
 .pub-right {
