@@ -62,6 +62,29 @@
         top: 0;
         white-space: nowrap;
     }
+
+    .image-gallery.is-loading {
+      height: 0;
+      overflow: hidden;
+    }
+
+    .image-gallery.is-loading img.gallery-item {
+      position: absolute;
+      visibility: hidden;
+      width: 0;
+      height: 0;
+    }
+
+    .image-gallery.is-ready img.gallery-item {
+      opacity: 0;
+      transform: scale(0.88);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .image-gallery.is-ready img.gallery-item.is-visible {
+      opacity: 1;
+      transform: scale(1);
+    }
   </style>
   
 </head>
@@ -580,7 +603,7 @@
           Beyond gaming, I love traveling and exploring diverse cultures.✈️
         </p>
 
-        <div class="image-gallery">
+        <div class="image-gallery is-loading">
           <img class="intro-img frame gallery-item" src="./images/self-portrait/dafx oral.jpg" alt="Image 1">
           <img class="intro-img frame gallery-item" src="./images/self-portrait/lol2.jpg" alt="Image 2">
           <img class="intro-img frame gallery-item" src="./images/self-portrait/formal.jpg" alt="Image 3">
@@ -594,105 +617,154 @@
 
       </div>
     </div>
+
+    <table style="width:320px;max-width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
+      <tbody><tr>
+        <td style="width:100%; vertical-align:middle; text-align:center;"><p>
+          <script type="text/javascript" id="mmvst_globe" src="https://mapmyvisitors.com/globe.js?d=jDJnbCKszq1zg38hTZqUaWnwBudtfD6SsyRosdnTGdw&w=320"></script>
+        </p></td>
+      </tr></tbody>
+    </table>
   </div>
 </div>
 
 <style>
-.image-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
-  overflow: hidden; /* Prevent scrollbar from appearing */
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* Ensure containers with image-gallery don't show scrollbar */
-.pub .image-gallery {
+#misc .pub-list,
+#misc .pub {
   overflow-x: hidden;
   overflow-y: visible;
 }
 
+.image-gallery {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 20px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 .image-gallery img.gallery-item {
-  height: auto;
-  max-width: calc(100% - 15px); /* Account for gap to prevent overflow */
-  max-height: 300px; 
-  width: auto;  
+  position: absolute;
+  display: block;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease;
-  object-fit: contain;
-  opacity: 0;
-  transform: translateY(30px) scale(0.9);
-  box-sizing: border-box; /* Ensure padding and border don't cause overflow */
+  object-fit: cover;
+  box-sizing: border-box;
 }
 
-.image-gallery img.gallery-item.animated {
-  animation: fadeInUp 0.6s ease forwards;
+.image-gallery.is-ready img.gallery-item.is-visible {
+  transition: opacity 0.45s ease, transform 0.45s ease;
 }
 
-.image-gallery img.gallery-item:hover {
-  transform: translateY(0) scale(1.05);
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.image-gallery.is-ready img.gallery-item.is-visible:hover {
+  transform: scale(1.03);
+  z-index: 1;
 }
 </style>
 
+<script src="js/justified-layout.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const galleryItems = document.querySelectorAll('.gallery-item');
-  
-  // Use Intersection Observer API to detect when images enter viewport
-  const observerOptions = {
-    root: null, // Use viewport as root
-    rootMargin: '50px', // Start loading 50px before entering viewport
-    threshold: 0.1 // Trigger when 10% of image is visible
-  };
+  var justifiedLayout = require('justified-layout');
+  var gallery = document.querySelector('.image-gallery');
+  if (!gallery) return;
 
-  const observer = new IntersectionObserver(function(entries) {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        // Add delay to make images appear sequentially
-        setTimeout(() => {
-          entry.target.classList.add('animated');
-        }, index * 100); // Delay each image by 100ms
-        observer.unobserve(entry.target); // Stop observing after animation is triggered
-      }
+  var images = Array.from(gallery.querySelectorAll('img.gallery-item'));
+  if (!images.length) return;
+
+  var isFirstLayout = true;
+  var hasAnimated = false;
+
+  function getTargetRowHeight() {
+    if (window.innerWidth <= 600) return 120;
+    if (window.innerWidth <= 900) return 150;
+    return 195;
+  }
+
+  function layoutGallery() {
+    var containerWidth = gallery.offsetWidth;
+    if (!containerWidth) return;
+
+    var aspectRatios = images.map(function(img) {
+      var w = img.naturalWidth;
+      var h = img.naturalHeight;
+      return w && h ? w / h : 1.5;
     });
-  }, observerOptions);
 
-  // Start observing all images
-  galleryItems.forEach(item => {
-    observer.observe(item);
+    var geometry = justifiedLayout(aspectRatios, {
+      containerWidth: containerWidth,
+      targetRowHeight: getTargetRowHeight(),
+      boxSpacing: 10,
+      widowLayoutStyle: 'justify'
+    });
+
+    gallery.style.height = geometry.containerHeight + 'px';
+
+    images.forEach(function(img, index) {
+      var box = geometry.boxes[index];
+      img.style.top = box.top + 'px';
+      img.style.left = box.left + 'px';
+      img.style.width = box.width + 'px';
+      img.style.height = box.height + 'px';
+      img.style.visibility = 'visible';
+    });
+
+    if (isFirstLayout) {
+      gallery.classList.remove('is-loading');
+      gallery.classList.add('is-ready');
+      isFirstLayout = false;
+      animateGalleryItems();
+    }
+  }
+
+  function animateGalleryItems() {
+    if (hasAnimated) return;
+    hasAnimated = true;
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+
+        images.forEach(function(img, index) {
+          setTimeout(function() {
+            img.classList.add('is-visible');
+          }, index * 80);
+        });
+
+        observer.disconnect();
+      });
+    }, {
+      root: null,
+      rootMargin: '60px',
+      threshold: 0.05
+    });
+
+    observer.observe(gallery);
+  }
+
+  Promise.all(images.map(function(img) {
+    if (img.complete && img.naturalWidth) {
+      return Promise.resolve();
+    }
+    return new Promise(function(resolve) {
+      img.addEventListener('load', resolve, { once: true });
+      img.addEventListener('error', resolve, { once: true });
+    });
+  })).then(function() {
+    layoutGallery();
+
+    if (typeof ResizeObserver !== 'undefined') {
+      var resizeObserver = new ResizeObserver(function() {
+        layoutGallery();
+      });
+      resizeObserver.observe(gallery);
+    } else {
+      window.addEventListener('resize', layoutGallery);
+    }
   });
 });
 </script>
-
-
-
-    <table style="width:16%;max-width:400px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
-      <tbody><tr>
-        <td style="width:100%; vertical-align:middle; text-align:center;"><p>
-          <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=vFRzul-O24gsBrfsS5k0FiIu8gxeyBaEhsc1MM1u-vw"></script>
-        </a></p></td>
-      </tr></tbody>
-    </table>
-    </div>
-  </div>
-</div>
-
 
 <footer class="site-footer">
   <div class="wrapper">
