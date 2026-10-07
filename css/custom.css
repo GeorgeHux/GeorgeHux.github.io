@@ -4,3 +4,268 @@
 .grey-hl{
   color: #696969;
 }
+
+#dashboard {
+  --ink: #14171c;
+  --muted: #626b78;
+  --subtle: #6b7380;
+  --line: #e7e9ee;
+  --card: #ffffff;
+  --radius-sm: 7px;
+  --shadow: 0 1px 2px rgba(18, 22, 30, .04), 0 1px 3px rgba(18, 22, 30, .06);
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 30px;
+  margin-top: 0;
+}
+
+.dash-bio {
+  flex: 3 1 360px;
+  min-width: 0;
+}
+
+.dash-bio-body {
+  margin: 5px 0;
+  padding: 0;
+}
+
+.dash-tmline {
+  flex: 2 1 280px;
+  min-width: 0;
+}
+
+.dash-tmline-body {
+  padding: 0;
+}
+
+.tmline-item {
+  width: calc(100% - 20px);
+  position: relative;
+  box-sizing: border-box;
+  margin-left: 5px;
+  padding-left: 27.5px;
+  padding-bottom: 14px;
+  border-left: 5px solid transparent;
+  text-align: left;
+}
+
+.tmline-item:before {
+  width: 11px;
+  height: 11px;
+  background: #333;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 36px;
+  left: -8px;
+  transform: translateY(-50%);
+  border-radius: 5px;
+}
+
+.tmline-item:after {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: #333;
+}
+
+.dash-tmline-body > .tmline-item:first-child:after {
+  top: 36px;
+}
+
+.dash-tmline-body > .tmline-item:last-child:after {
+  bottom: auto;
+  height: 36px;
+}
+
+.dash-tmline-body > .tmline-item:last-child {
+  vertical-align: middle;
+  min-height: 10px;
+  padding-bottom: 0;
+}
+
+.tmline-logo {
+  position: absolute;
+  left: -21.5px;
+  top: 36px;
+  transform: translateY(-50%);
+  transform-origin: center center;
+  z-index: 1;
+  display: block;
+  overflow: hidden;
+  width: 38px;
+  height: 38px;
+  box-sizing: border-box;
+  color: #17181b;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  transition: background-color 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tmline-logo::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  opacity: 1;
+  background-image: var(--logo-color, none);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.logo-moonshot {
+  --logo: url("../images/logos/moonshot.svg");
+  --logo-color: url("../images/logos/moonshot-color.svg");
+}
+
+.logo-tencent {
+  --logo: url("../images/logos/tencent.png");
+  --logo-color: url("../images/logos/tencent-color.png");
+}
+
+.logo-cambridge {
+  --logo: url("../images/logos/cambridge.svg");
+  --logo-color: url("../images/logos/cambridge-color.svg");
+}
+
+.logo-imperial {
+  --logo: url("../images/logos/imperial.svg");
+  --logo-color: url("../images/logos/imperial-color.svg");
+}
+
+.logo-ucl {
+  --logo: url("../images/logos/ucl.svg");
+  --logo-color: url("../images/logos/ucl-color.svg");
+}
+
+.tmline-date {
+  font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #6b7380;
+}
+
+.tmline-title {
+  font-size: 20px;
+  font-weight: 550;
+  color: #0b0c0e;
+}
+
+.tmline-title a,
+.tmline-title a:visited {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tmline-title a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tmline-title a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.tmline-title a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+.tmline-main {
+  transform-origin: left 16px;
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tmline-desc {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.tmline-host {
+  font-size: 14px;
+  font-weight: 400;
+  color: #4a5160;
+  white-space: nowrap;
+}
+
+@keyframes tmline-glint {
+  from { background-position: -100% 0; }
+  to { background-position: 200% 0; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tmline-item:hover .tmline-main {
+    transform: scale(1.02);
+  }
+
+  .tmline-item:hover .tmline-logo {
+    transform: translateY(-50%) scale(1.02);
+  }
+}
+
+.news {
+  --ink: #14171c;
+  --muted: #626b78;
+  --line: #e7e9ee;
+  margin-top: 28px;
+  margin-bottom: 10px;
+}
+
+.news-item {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 4px 10px;
+  margin: 0 -10px 2px;
+  border-radius: 8px;
+  transition: background-color .2s ease;
+}
+
+.news-date {
+  flex: 0 0 92px;
+  font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: #62676f;
+  white-space: nowrap;
+}
+
+.news-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .news-item:hover {
+    background-color: rgba(20, 23, 28, 0.045);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .dash-tmline-body {
+    margin-top: 12px;
+  }
+}

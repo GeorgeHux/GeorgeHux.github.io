@@ -1632,6 +1632,17 @@ div.paginate-container li:nth-last-child(2) a:after {
     margin-right: auto
 }
 
+.pub-left>.intro-video {
+    overflow: hidden;
+    height: 152px;
+    background: #2a2a2a
+}
+
+.pub-left>.intro-video>video {
+    width: 100%;
+    display: block
+}
+
 .pub-right {
     float: right;
     width: -webkit-calc(60% - (30px / 2));
