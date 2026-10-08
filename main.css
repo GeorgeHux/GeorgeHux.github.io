@@ -1643,6 +1643,20 @@ div.paginate-container li:nth-last-child(2) a:after {
     display: block
 }
 
+.pub-left>.intro-video.intro-video-fit {
+    height: auto;
+    aspect-ratio: 2 / 1;
+    background: transparent;
+    line-height: 0
+}
+
+.pub-left>.intro-video.intro-video-fit>video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block
+}
+
 .pub-right {
     float: right;
     width: -webkit-calc(60% - (30px / 2));
